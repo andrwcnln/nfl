@@ -8,7 +8,7 @@ Version: 0.3
 
 import requests
 import json
-import dotenv
+# import dotenv
 
 # Season object, containing all of the information on a current season
 # Properties:
@@ -79,7 +79,7 @@ class week:
             if home['winner']:
                 self.winners.append(game['competitions'][0]['competitors'][0]['team']['abbreviation'])
             elif away['winner']:
-                self.winners.append(game['competitions'][0]['competitors'][0]['team']['abbreviation'])
+                self.winners.append(game['competitions'][0]['competitors'][1]['team']['abbreviation'])
             else:
                 self.winners.append('TIE')
 
