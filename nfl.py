@@ -8,6 +8,7 @@ Version: 0.1
 
 import requests
 import json
+import dotenv
 
 # Season object, containing all of the information on a current season
 # Properties:
@@ -29,17 +30,18 @@ class season:
         self.weeks = []
         for weekN in range(weekStart,weekEnd+1):
             print(f"Fetching data for week {weekN}")
-            url = f"https://cdn.espn.com/core/nfl/schedule?xhr=1&year={self.year}&week={weekN}"
+            url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?season.year={self.year}&season.type=2&week={weekN}"
             
             print(f"--->    Parsing data for week {weekN}")
             data = requests.get(url).json()
             # print(data['content']['schedule'])
-            schedule = data['content']['schedule']
 
             currentWeek = week(weekN)
-            currentWeek.setGames(schedule)
+            currentWeek.setGames(data)
 
             self.weeks.append(currentWeek)
+
+    def getScores(self,weekN)
 
 # Week object, containing all information on a current week
 # Properties:
@@ -57,11 +59,10 @@ class week:
     def __str__(self):
         return f"Week {self.weekN}"
 
-    def setGames(self,schedule):
-        dates = self.extractKeys(schedule)
-        for date in dates:
-            for game in schedule[date]['games']:
-                self.games.append(game)
+    def setGames(self,data):
+        games = data['events']
+        for game in games
+            self.games.append(game)
 
     # Internal methods
     def extractKeys(self,dict):
