@@ -41,7 +41,8 @@ class season:
 
             self.weeks.append(currentWeek)
 
-    def getScores(self,weekN)
+    def getScores(self,weekN):
+        pass
 
 # Week object, containing all information on a current week
 # Properties:
@@ -61,7 +62,7 @@ class week:
 
     def setGames(self,data):
         games = data['events']
-        for game in games
+        for game in games:
             self.games.append(game)
 
     # Internal methods
