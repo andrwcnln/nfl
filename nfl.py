@@ -3,7 +3,7 @@ A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
 Last updated: 22nd Sep 2023 
-Version: 0.2
+Version: 0.3
 """
 
 import requests
@@ -52,7 +52,10 @@ class season:
 class week:
     def __init__(self, weekN, data):
         self.weekN = weekN
-        self.setGames()
+        self.games = []
+        self.setGames(data)
+        self.winners = []
+        self.setWinners()
         # self.rawData = data
         # self.jsonData = self.rawData.json()
         # self.parsedData = json.load(self.jsonData)
@@ -69,25 +72,21 @@ class week:
         for game in self.games:
             print(game['shortName'])
 
+    def setWinners(self):
+        for game in self.games:
+            home = game['competitions'][0]['competitors'][0]
+            away = game['competitions'][0]['competitors'][1]
+            if home['winner']:
+                self.winners.append(game['competitions'][0]['competitors'][0]['team']['abbreviation'])
+            elif away['winner']:
+                self.winners.append(game['competitions'][0]['competitors'][0]['team']['abbreviation'])
+            else:
+                self.winners.append('TIE')
+
+    def printWinners(self):
+        for winner in self.winners:
+            print(winner)
+
     # Internal methods
     def extractKeys(self,dict):
         return list(dict.keys())
-
-
-
-
-
-# test = season('2023')
-# print(test)
-
-# test.getSchedule(3,3)
-# print(test.weeks[0].weekN)
-# print(test.weeks[0].games[0]['shortName'])
-
-# s = season('2023')
-# s.getSchedule(1,18)
-# for w in range(0,18):
-#     l = len(s.weeks[w].games)
-#     print(w)
-#     for g in range(0,l):
-#         print(s.weeks[w].games[g]['shortName'])
