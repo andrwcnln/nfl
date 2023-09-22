@@ -3,7 +3,7 @@ A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
 Last updated: 22nd Sep 2023 
-Version: 0.1
+Version: 0.2
 """
 
 import requests
@@ -36,8 +36,7 @@ class season:
             data = requests.get(url).json()
             # print(data['content']['schedule'])
 
-            currentWeek = week(weekN)
-            currentWeek.setGames(data)
+            currentWeek = week(weekN,data)
 
             self.weeks.append(currentWeek)
 
@@ -47,12 +46,13 @@ class season:
 # Week object, containing all information on a current week
 # Properties:
 # - weekN: week number
+# - data: ESPN game data
 # Methods
-# - setGames: set the games for this week 
+# - setGames: set the games property for this object
 class week:
-    def __init__(self, weekN):
+    def __init__(self, weekN, data):
         self.weekN = weekN
-        self.games = []
+        self.setGames()
         # self.rawData = data
         # self.jsonData = self.rawData.json()
         # self.parsedData = json.load(self.jsonData)
@@ -64,6 +64,10 @@ class week:
         games = data['events']
         for game in games:
             self.games.append(game)
+
+    def printGames(self):
+        for game in self.games:
+            print(game['shortName'])
 
     # Internal methods
     def extractKeys(self,dict):
@@ -79,3 +83,11 @@ class week:
 # test.getSchedule(3,3)
 # print(test.weeks[0].weekN)
 # print(test.weeks[0].games[0]['shortName'])
+
+# s = season('2023')
+# s.getSchedule(1,18)
+# for w in range(0,18):
+#     l = len(s.weeks[w].games)
+#     print(w)
+#     for g in range(0,l):
+#         print(s.weeks[w].games[g]['shortName'])
