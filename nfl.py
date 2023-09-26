@@ -29,10 +29,8 @@ class season:
     def getSchedule(self, weekStart, weekEnd):
         self.weeks = []
         for weekN in range(weekStart,weekEnd+1):
-            print(f"Fetching data for week {weekN}")
+            print(f"--> Fetching data for week {weekN}")
             url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?season.year={self.year}&season.type=2&week={weekN}"
-            
-            print(f"--->    Parsing data for week {weekN}")
             data = requests.get(url).json()
             # print(data['content']['schedule'])
 
