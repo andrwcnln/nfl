@@ -2,13 +2,26 @@
 A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
-Last updated: 22nd Sep 2023 
-Version: 0.3
+Last updated: 29th Sep 2023 
+Version: 0.4
 """
 
 import requests
 import json
-# import dotenv
+
+from google.auth.transport.requests import Request
+from google.oauth2.credentials import Credentials
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
+from googleapiclient.errors import HttpError
+
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
+
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
 
 # Season object, containing all of the information on a current season
 # Properties:
@@ -38,8 +51,56 @@ class season:
 
             self.weeks.append(currentWeek)
 
-    def getScores(self,weekN):
+    def updateGames(self):
+        # a method to update the games in the remote spreadsheet
+        creds = self.googleAuth()
+
+        try:
+            service = build('sheets', 'v4', credentials=creds)
+            values = [[]]
+            for week in self.weeks:
+                for game in week.games:
+                    values[0].append(game['shortName'])
+            print(values)
+            body = {
+                'majorDimension': 'COLUMNS',
+                'values': values
+            }
+            result = service.spreadsheets().values().append(
+            spreadsheetId=SPREADSHEET_ID, range="Prototype!L1:M2",
+            valueInputOption="USER_ENTERED", body=body).execute()
+            print(f"{result.get('updatedCells')} cells updated.")
+
+        except HttpError as error:
+            print(f"An error occurred: {error}")
+            return error
+
+    def updateWinners(self,weekN):
+        # a method to update the scores in the remote spreadsheet
         pass
+
+    # internal methods
+    def googleAuth(self):
+        creds = None
+        # The file token.json stores the user's access and refresh tokens, and is
+        # created automatically when the authorization flow completes for the first
+        # time.
+        if os.path.exists('token.json'):
+            creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+        # If there are no (valid) credentials available, let the user log in.
+        if not creds or not creds.valid:
+            if creds and creds.expired and creds.refresh_token:
+                creds.refresh(Request())
+            else:
+                flow = InstalledAppFlow.from_client_secrets_file(
+                    'credentials.json', SCOPES)
+                creds = flow.run_local_server(port=0)
+            # Save the credentials for the next run
+            with open('token.json', 'w') as token:
+                token.write(creds.to_json())
+        
+        return creds
+
 
 # Week object, containing all information on a current week
 # Properties:
@@ -53,7 +114,7 @@ class week:
         self.games = []
         self.setGames(data)
         self.winners = []
-        self.setWinners()
+        # self.setWinners()
         # self.rawData = data
         # self.jsonData = self.rawData.json()
         # self.parsedData = json.load(self.jsonData)
