@@ -21,7 +21,8 @@ from dotenv import load_dotenv
 load_dotenv()
 SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
 
-SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
+SCOPES = ['https://www.googleapis.com/auth/spreadsheets',"https://www.googleapis.com/auth/forms.body"]
+DISCOVERY_DOC = "https://forms.googleapis.com/$discovery/rest?version=v1"
 
 # Season object, containing all of the information on a current season
 # Properties:
@@ -57,17 +58,20 @@ class season:
 
         try:
             service = build('sheets', 'v4', credentials=creds)
-            values = [[]]
+            values = [[],[],[]]
             for week in self.weeks:
                 for game in week.games:
-                    values[0].append(game['shortName'])
+                    values[0].append(week.weekN)
+                    values[1].append(game['shortName'])
+                    values[2].append("winner")
+
             print(values)
             body = {
                 'majorDimension': 'COLUMNS',
                 'values': values
             }
             result = service.spreadsheets().values().append(
-            spreadsheetId=SPREADSHEET_ID, range="Prototype!L1:M2",
+            spreadsheetId=SPREADSHEET_ID, range="Prototype (data)!A1:3",
             valueInputOption="USER_ENTERED", body=body).execute()
             print(f"{result.get('updatedCells')} cells updated.")
 
@@ -114,7 +118,7 @@ class week:
         self.games = []
         self.setGames(data)
         self.winners = []
-        # self.setWinners()
+        self.setWinners()
         # self.rawData = data
         # self.jsonData = self.rawData.json()
         # self.parsedData = json.load(self.jsonData)
