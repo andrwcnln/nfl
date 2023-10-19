@@ -3,7 +3,7 @@ A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
 Last updated: 19th Oct 2023 
-Version: 0.5.3
+Version: 0.5.4
 """
 
 import requests
@@ -136,6 +136,8 @@ class week:
         self.setGames(data)
         self.winners = []
         self.setWinners()
+        self.scores = []
+        self.setScores()
 
     def __str__(self):
         return f"Week {self.weekN}"
@@ -166,6 +168,16 @@ class week:
             except KeyError:
                 self.winners.append('N/A')
 
+    def setScores(self):
+        # a method to find the winners of games and set the corresponding winners property
+        for game in self.games:
+            try:
+                home = game['competitions'][0]['competitors'][0]['score']
+                away = game['competitions'][0]['competitors'][1]['score']
+            except KeyError:
+                home = 0
+                away = 0
+            self.scores.append(away + ' - ' + home)
 
     def printWinners(self):
         # a method to iterate through and print the winners
