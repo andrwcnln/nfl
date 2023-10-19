@@ -41,6 +41,7 @@ class season:
         return f"A season object for the {self.year} NFL season"
 
     def getSchedule(self, weekStart, weekEnd):
+        # a method to get all the information on a season, between the given weeks
         self.weeks = []
         for weekN in range(weekStart,weekEnd+1):
             print(f"--> Fetching data for week {weekN}")
@@ -105,12 +106,13 @@ class season:
         return creds
 
 
-# Week object, containing all information on a current week
+# Week object, containing all information on a relevant week
 # Properties:
 # - weekN: week number
 # - data: ESPN game data
 # Methods
 # - setGames: set the games property for this object
+# - setWinners: set the winners property for this object
 class week:
     def __init__(self, weekN, data):
         self.weekN = weekN
