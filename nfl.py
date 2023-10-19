@@ -3,7 +3,7 @@ A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
 Last updated: 19th Oct 2023 
-Version: 0.5.1
+Version: 0.5.3
 """
 
 import requests
@@ -52,11 +52,21 @@ class season:
 
             self.weeks.append(currentWeek)
 
+    def printGames(self, weekStart, weekEnd):
+        # a method to print the games for a given set of weeks
+        for weekN in range(weekStart-1,weekEnd):
+            print(self.weeks[weekN])
+            print(' ')
+            self.weeks[weekN].printGames()
+            print(' ')
+
     def printWinners(self, weekStart, weekEnd):
         # a method to print the winners for a given set of weeks
         for weekN in range(weekStart-1,weekEnd):
             print(self.weeks[weekN])
+            print(' ')
             self.weeks[weekN].printWinners()
+            print(' ')
 
     def updateGames(self):
         # a method to update the games in the remote spreadsheet
