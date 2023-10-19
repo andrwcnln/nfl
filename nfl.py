@@ -2,8 +2,8 @@
 A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
-Last updated: 29th Sep 2023 
-Version: 0.4
+Last updated: 19th Oct 2023 
+Version: 0.5
 """
 
 import requests
@@ -46,7 +46,6 @@ class season:
             print(f"--> Fetching data for week {weekN}")
             url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?season.year={self.year}&season.type=2&week={weekN}"
             data = requests.get(url).json()
-            # print(data['content']['schedule'])
 
             currentWeek = week(weekN,data)
 
@@ -119,9 +118,6 @@ class week:
         self.setGames(data)
         self.winners = []
         self.setWinners()
-        # self.rawData = data
-        # self.jsonData = self.rawData.json()
-        # self.parsedData = json.load(self.jsonData)
 
     def __str__(self):
         return f"Week {self.weekN}"
@@ -139,12 +135,16 @@ class week:
         for game in self.games:
             home = game['competitions'][0]['competitors'][0]
             away = game['competitions'][0]['competitors'][1]
-            if home['winner']:
-                self.winners.append(game['competitions'][0]['competitors'][0]['team']['abbreviation'])
-            elif away['winner']:
-                self.winners.append(game['competitions'][0]['competitors'][1]['team']['abbreviation'])
-            else:
-                self.winners.append('TIE')
+            try:
+                if home['winner']:
+                    self.winners.append(game['competitions'][0]['competitors'][0]['team']['abbreviation'])
+                elif away['winner']:
+                    self.winners.append(game['competitions'][0]['competitors'][1]['team']['abbreviation'])
+                else:
+                    self.winners.append('TIE')
+            except KeyError:
+                self.winners.append('N/A')
+
 
     def printWinners(self):
         for winner in self.winners:
