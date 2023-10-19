@@ -131,15 +131,18 @@ class week:
         return f"Week {self.weekN}"
 
     def setGames(self,data):
+        # a method to populate the games property with the games from the data
         games = data['events']
         for game in games:
             self.games.append(game)
 
     def printGames(self):
+        # a method to iterate through and print the games
         for game in self.games:
             print(game['shortName'])
 
     def setWinners(self):
+        # a method to find the winners of games and set the corresponding winners property
         for game in self.games:
             home = game['competitions'][0]['competitors'][0]
             away = game['competitions'][0]['competitors'][1]
@@ -155,6 +158,7 @@ class week:
 
 
     def printWinners(self):
+        # a method to iterate through and print the winners
         for winner in self.winners:
             print(winner)
 
