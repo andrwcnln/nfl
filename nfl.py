@@ -94,16 +94,18 @@ class season:
             print(f"An error occurred: {error}")
             return error
 
-    def updateWinners(self,weekN):
+    def updateScoresAndWinners(self,weekN):
         # a method to update the winners in the remote spreadsheet
         creds = self.googleAuth()
 
         try:
             service = build('sheets', 'v4', credentials=creds)
-            values = [[]]
+            values = [[],[]]
             week = self.weeks[weekN-1]
+            for score in week.scores:
+                values[0].append(score)
             for winner in week.winners:
-                values[0].append(winner)
+                values[1].append(winner)
 
             print(values)
             body = {
@@ -111,7 +113,7 @@ class season:
                 'values': values
             }
             result = service.spreadsheets().values().append(
-            spreadsheetId=SPREADSHEET_ID, range="Prototype (data)!D1",
+            spreadsheetId=SPREADSHEET_ID, range="Prototype (data)!D1:E1",
             valueInputOption="USER_ENTERED", body=body).execute()
             print(f"{result.get('updatedCells')} cells updated.")
 
