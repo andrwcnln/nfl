@@ -74,12 +74,11 @@ class season:
 
         try:
             service = build('sheets', 'v4', credentials=creds)
-            values = [[],[],[]]
+            values = [[],[]]
             for week in self.weeks:
                 for game in week.games:
                     values[0].append(week.weekN)
                     values[1].append(game['shortName'])
-                    values[2].append("winner")
 
             print(values)
             body = {
@@ -87,7 +86,7 @@ class season:
                 'values': values
             }
             result = service.spreadsheets().values().append(
-            spreadsheetId=SPREADSHEET_ID, range="Prototype (data)!A1:3",
+            spreadsheetId=SPREADSHEET_ID, range="Prototype (data)!A1:B1",
             valueInputOption="USER_ENTERED", body=body).execute()
             print(f"{result.get('updatedCells')} cells updated.")
 
@@ -96,8 +95,29 @@ class season:
             return error
 
     def updateWinners(self,weekN):
-        # a method to update the scores in the remote spreadsheet
-        pass
+        # a method to update the winners in the remote spreadsheet
+        creds = self.googleAuth()
+
+        try:
+            service = build('sheets', 'v4', credentials=creds)
+            values = [[]]
+            week = self.weeks[weekN-1]
+            for winner in week.winners:
+                values[0].append(winner)
+
+            print(values)
+            body = {
+                'majorDimension': 'COLUMNS',
+                'values': values
+            }
+            result = service.spreadsheets().values().append(
+            spreadsheetId=SPREADSHEET_ID, range="Prototype (data)!D1",
+            valueInputOption="USER_ENTERED", body=body).execute()
+            print(f"{result.get('updatedCells')} cells updated.")
+
+        except HttpError as error:
+            print(f"An error occurred: {error}")
+            return error
 
     # internal methods
     def googleAuth(self):
