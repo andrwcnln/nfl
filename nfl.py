@@ -2,8 +2,8 @@
 A set of classes for getting data about an NFL season
 
 Author: Andrew Conlin
-Last updated: 19th Oct 2023 
-Version: 0.5.4
+Last updated: 20th Oct 2023 
+Version: 0.5.5
 """
 
 import requests
