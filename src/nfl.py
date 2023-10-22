@@ -45,7 +45,7 @@ class season:
         self.weeks = []
         for weekN in range(weekStart,weekEnd+1):
             print(f"--> Fetching data for week {weekN}")
-            url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?season.year={self.year}&season.type=2&week={weekN}"
+            url = f"https://site.api.espn.com/apis/site/v2/sports/football/nfl/scoreboard?dates={self.year}&seasontype=2&week={weekN}"
             data = requests.get(url).json()
 
             currentWeek = week(weekN,data)

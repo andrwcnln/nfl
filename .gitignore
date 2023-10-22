@@ -3,6 +3,9 @@ include/
 lib/
 lib64
 __pycache__/
+tests/__pycache__/
+tests/.pytest_cache/
+tests/.coverage
 *.cfg
 .env
 *.json
