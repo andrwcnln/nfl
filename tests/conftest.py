@@ -1,8 +1,7 @@
 import pytest
 import pickle
 
-import os
-path = os.path.abspath('../src')
+path = 'src'
 import sys
 sys.path.append(path)
 import nfl
@@ -12,7 +11,7 @@ def loadCache():
     print('Getting cache...')
     cache = {}
     for year in ['2020','2021','2022']:
-        file = '../.cache/season' + year + '.cache'
+        file = '.cache/season' + year + '.cache'
         with open(file,'rb') as inp:
             cache[year] = pickle.load(inp)
     print('Done!')
