@@ -1,8 +1,9 @@
 import pytest
 import pickle
 
+import os
+path = os.path.abspath('../src')
 import sys
-path = '../src'
 sys.path.append(path)
 import nfl
 
