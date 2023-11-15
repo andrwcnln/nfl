@@ -1,15 +1,11 @@
-import sys
 import pickle
-
-path = '../src'
-sys.path.append(path)
 import nfl
 
-years = ['2020','2021','2022']
+years = ["2020", "2021", "2022"]
 
 for year in years:
     s = nfl.season(year)
-    s.getSchedule(1,18)
+    s.getSchedule(1, 18)
 
     games = []
     winners = []
@@ -23,10 +19,8 @@ for year in years:
         for score in week.scores:
             scores.append(score)
 
-    cache = {'games'  : games,
-            'winners' : winners,
-            'scores'  : scores}
+    cache = {"games": games, "winners": winners, "scores": scores}
 
-    file = '../.cache/season' + year + '.cache'
-    with open(file,'wb+') as out:
-        pickle.dump(cache,out)
+    file = "../.cache/season" + year + ".cache"
+    with open(file, "wb+") as out:
+        pickle.dump(cache, out)

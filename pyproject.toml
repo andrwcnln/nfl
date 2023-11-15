@@ -1,0 +1,14 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Operating System :: OS Independent",
+]
+name = "nfl"
+version = "0.6.0"
+authors = [{ name = "Andrew Conlin", email = "andrew@andrewconl.in" }]
+description = "A set of classes for getting data about an NFL season"
+requires-python = ">=3.11"

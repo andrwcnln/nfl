@@ -12,3 +12,4 @@ tests/.coverage
 nfl.md
 default.py
 .coverage
+*.egg-info
