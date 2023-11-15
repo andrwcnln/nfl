@@ -11,3 +11,4 @@ tests/.coverage
 *.json
 nfl.md
 default.py
+.coverage
